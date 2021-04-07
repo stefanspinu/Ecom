@@ -1,0 +1,179 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      <a class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+
+      <br>
+      <br>
+
+      <table class="table">
+        <tr>
+          <th>
+            <h5>Items: <strong class="cart-items-global">{{ order.get_cart_items }}</strong></h5>
+          </th>
+          <th>
+            <h5>Price: <strong class="cart-price-global">{{ order.get_cart_total|floatformat:2 }}$</strong></h5>
+          </th>
+          <th>
+            <a style="float: right; margin: 5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+          </th>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <div class="box-element">
+      <div class="cart-row">
+        <div style="flex: 2"></div>
+        <div style="flex: 2"><strong>Items</strong></div>
+        <div style="flex: 1"><strong>Prices</strong></div>
+        <div style="flex: 1"><strong>Quantitys</strong></div>
+        <div style="flex: 1"><strong>Totals</strong></div>
+      </div>
+      {% for item in items %}
+      <div class="cart-row">
+        <div style="flex: 2"><img class="row-image" src="{{ item.product.imageUrl }}" alt=""></div>
+        <div style="flex: 2">{{ item.product.name }}</div>
+        <div style="flex: 1" class="item-price">{{ item.product.price|floatformat:2 }}$</div>
+        <div style="flex: 1">
+          <input class="quantity item-quantity" id="{{item.product.id}}" value="{{ item.quantity }}">
+          <div class="quantity">
+            <img src="{% static 'images/arrow-up.png' %}" alt="" class="chg-quantity update-cart"
+              data-product={{item.product.id}} data-action="add" onclick="increaseNumber('{{item.product.id}}')">
+            <img src="{% static 'images/arrow-down.png' %}" alt="" class="chg-quantity update-cart"
+              data-product={{item.product.id}} data-action="remove" onclick="decreaseNumber('{{item.product.id}}')">
+          </div>
+        </div>
+        <div style="flex: 1" class="item-total">{{ item.get_total|floatformat:2 }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+const decreaseNumber = (prodctId) => {
+  var itemsQuantity = document.getElementById(prodctId)
+    try{
+      //console.log(itemsQuantity.value);
+      if(itemsQuantity.value <= 0) {
+        itemsQuantity.value = 0
+      } else {
+        itemsQuantity.value = parseInt(itemsQuantity.value) - 1
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    
+    
+}
+
+const increaseNumber = (prodctId) => {
+  var itemsQuantity = document.getElementById(prodctId)
+    try{
+      //console.log(itemsQuantity.value);
+        itemsQuantity.value = parseInt(itemsQuantity.value) + 1
+    } catch (e) {
+      console.log(e);
+    }
+    
+}
+
+ //function changeQuantityInCart(action){
+  //itemsQuantityWrapper.forEach( function (item) {
+  //  item.addEventListener('click', function () {
+  //    
+  //    let itemQuantity = item.firstElementChild
+  //    let itemQuantityNumber = parseInt(itemQuantity.textContent)
+  //    let itemRemove = item.firstElementChild.nextSibling.nextSibling.childNodes[1].nextSibling.nextSibling;
+  //    let itemAdd = item.firstElementChild.nextSibling.nextSibling.childNodes[1];
+  //    itemAdd.addEventListener('click', function () {
+  //      itemQuantityNumber += 1
+  //      itemQuantity.innerHTML = itemQuantityNumber
+  //    })
+  //    itemRemove.addEventListener('click', function () {
+  //      itemQuantityNumber -= 1
+  //      itemQuantity.innerHTML = itemQuantityNumber
+  //    })
+  //    
+  //    
+  //  })
+  // 
+  //})
+
+  
+
+  //for(let i = 0 ; i <= itemsQuantityWrapper.length - 1; i++){
+  //  let itemQuantity = itemsQuantity[i]
+  //  let itemQuantityNumber = parseInt(itemQuantity.textContent)
+  //  console.log(action, itemsQuantity[i]);
+  //  addToCart[i].addEventListener('click', function() {
+  //    itemQuantityNumber = itemQuantityNumber + 1
+  //    itemQuantity.innerHTML = itemQuantityNumber
+  //  }, false)
+  //  removeFromCart[i].addEventListener('click', function() {
+  //    itemQuantityNumber = itemQuantityNumber - 1
+  //    itemQuantity.innerHTML = itemQuantityNumber
+  //  }, false)
+    //if (action == 'add') {
+    //    //console.log(itemQuantity);
+    //    itemQuantityNumber = itemQuantityNumber + 1
+    //    itemQuantity.innerHTML = itemQuantityNumber
+    //    //console.log(itemsQuantity);
+    //}
+//
+    //if (action == 'remove') {
+    //  //console.log(itemsQuantity);
+    //  itemQuantityNumber = itemQuantityNumber - 1
+    //  itemQuantity.innerHTML = itemQuantityNumber
+    //  //console.log(itemsQuantity);
+    //}
+    
+  //}
+  
+  //addGlobal()
+  //addToTotalLocal()
+//}
+
+function addTotalToItem(incdec) {
+  var itemsQuantity = document.getElementsByClassName('item-quantity')
+  var itemsPrice = document.getElementsByClassName('item-price')
+  var itemsTotal = document.getElementsByClassName('item-total')
+  try {
+    for (let i = 0; i <= itemsTotal.length - 1; i++){
+      let total = parseInt(itemsQuantity[i].value) * parseFloat(itemsPrice[i].textContent)
+      itemsTotal[i].innerHTML = total.toFixed(2)
+    }
+    
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+//CRK EL LA FINAL DA CORECT SI IN CONSOLA ARATA REZULTATUL CORECT NUMA CA HZ DE CE NU AFISEAZA
+function addGlobal(){
+  let cartTotal = document.querySelector('.cartTotal')
+  let items = document.querySelector('.cart-items-global')
+  var itemsTotal = document.getElementsByClassName('item-total')
+  var totalPrice = document.querySelector('.cart-price-global')
+  items.innerHTML = cartTotal.textContent
+  let total = 0
+  try {
+    for (let i = 0; i <= itemsTotal.length - 1; i++) {
+      console.log('before ', total);
+      total += parseFloat(itemsTotal[i].textContent);
+      console.log('after ', total);
+    }
+  } catch(e){
+    console.log(e);
+  }
+  console.log('final ', total);
+  totalPrice.innerHTML = total.toFixed(2) + '$'
+}
+
+</script>
+
+{% endblock content %}
