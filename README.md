@@ -21,4 +21,4 @@ I made an ecom website, where the user cand add items to cart adn buy them. I us
 
 ## Anonymous user perspective
 
-https://user-images.githubusercontent.com/43184137/113918216-d1077380-97ea-11eb-9e47-4fa310ef47ca.mp4
+![ecom](https://user-images.githubusercontent.com/43184137/113921181-5a6c7500-97ee-11eb-9bb8-a8e0095deed5.gif)
