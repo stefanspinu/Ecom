@@ -1,4 +1,4 @@
-# temegratis
+# Ecom
 A simpe ecom webiste
 
 Install requirementes
